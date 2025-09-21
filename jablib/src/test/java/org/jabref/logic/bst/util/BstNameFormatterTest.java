@@ -1,8 +1,14 @@
 package org.jabref.logic.bst.util;
 
+import java.util.stream.Stream;
+
 import org.jabref.model.entry.AuthorList;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -35,38 +41,43 @@ class BstNameFormatterTest {
     @Test
     void formatName() {
         AuthorList list = AuthorList.parse("Charles Louis Xavier Joseph de la Vall{\\'e}e Poussin");
-
         assertEquals("dlVP", BstNameFormatter.formatName(list.getAuthor(0), "{v{}}{l{}}"));
-
-        assertNameFormatA("Meyer, J?", "Jonathan Meyer and Charles Louis Xavier Joseph de la Vall{\\'e}e Poussin");
-        assertNameFormatB("J.~Meyer", "Jonathan Meyer and Charles Louis Xavier Joseph de la Vall{\\'e}e Poussin");
-        assertNameFormatC("Jonathan Meyer", "Jonathan Meyer and Charles Louis Xavier Joseph de la Vall{\\'e}e Poussin");
-        assertNameFormatA("Masterly, {\\'{E}}?", "{\\'{E}}douard Masterly");
-        assertNameFormatB("{\\'{E}}.~Masterly", "{\\'{E}}douard Masterly");
-        assertNameFormatC("{\\'{E}}douard Masterly", "{\\'{E}}douard Masterly");
-        assertNameFormatA("{\\\"{U}}nderwood, U?", "Ulrich {\\\"{U}}nderwood and Ned {\\~N}et and Paul {\\={P}}ot");
-        assertNameFormatB("U.~{\\\"{U}}nderwood", "Ulrich {\\\"{U}}nderwood and Ned {\\~N}et and Paul {\\={P}}ot");
-        assertNameFormatC("Ulrich {\\\"{U}}nderwood", "Ulrich {\\\"{U}}nderwood and Ned {\\~N}et and Paul {\\={P}}ot");
-        assertNameFormatA("Victor, P.~{\\'E}?", "Paul {\\'E}mile Victor and and de la Cierva y Codorn{\\’\\i}u, Juan");
-        assertNameFormatB("P.~{\\'E}. Victor", "Paul {\\'E}mile Victor and and de la Cierva y Codorn{\\’\\i}u, Juan");
-        assertNameFormatC("Paul~{\\'E}mile Victor",
-                "Paul {\\'E}mile Victor and and de la Cierva y Codorn{\\’\\i}u, Juan");
     }
 
-    private void assertNameFormat(String string, String string2, int which, String format) {
-        assertEquals(string, BstNameFormatter.formatName(string2, which, format));
+    @ParameterizedTest
+    @CsvSource({
+            "Jonathan Meyer,Jonathan Meyer and Charles Louis Xavier Joseph de la Vall{\\'e}e Poussin",
+            "{\\'{E}}douard Masterly,{\\'{E}}douard Masterly",
+            "Ulrich {\\\"{U}}nderwood,Ulrich {\\\"{U}}nderwood and Ned {\\~N}et and Paul {\\={P}}ot",
+            "Paul~{\\'E}mile Victor,Paul {\\'E}mile Victor and and de la Cierva y Codorn{\\’\\i}u, Juan"})
+    void formatNameC(String string, String string2) {
+        assertEquals(string, BstNameFormatter.formatName(string2, 1, "{ff }{vv }{ll}{ jj}"));
     }
 
-    private void assertNameFormatC(String string, String string2) {
-        assertNameFormat(string, string2, 1, "{ff }{vv }{ll}{ jj}");
+    @ParameterizedTest
+    @CsvSource({
+            "J.~Meyer,Jonathan Meyer and Charles Louis Xavier Joseph de la Vall{\\'e}e Poussin",
+            "{\\'{E}}.~Masterly,{\\'{E}}douard Masterly",
+            "U.~{\\\"{U}}nderwood,Ulrich {\\\"{U}}nderwood and Ned {\\~N}et and Paul {\\={P}}ot",
+            "P.~{\\'E}. Victor,Paul {\\'E}mile Victor and and de la Cierva y Codorn{\\’\\i}u, Juan"
+    })
+    void formatNameB(String string, String string2) {
+        assertEquals(string, BstNameFormatter.formatName(string2, 1, "{f.~}{vv~}{ll}{, jj}"));
     }
 
-    private void assertNameFormatB(String string, String string2) {
-        assertNameFormat(string, string2, 1, "{f.~}{vv~}{ll}{, jj}");
+    static Stream<Arguments> provideNames() {
+        return Stream.of(
+                Arguments.of("Meyer, J?", "Jonathan Meyer and Charles Louis Xavier Joseph de la Vall{\\'e}e Poussin"),
+                Arguments.of("Masterly, {\\'{E}}?", "{\\'{E}}douard Masterly"),
+                Arguments.of("{\\\"{U}}nderwood, U?", "Ulrich {\\\"{U}}nderwood and Ned {\\~N}et and Paul {\\={P}}ot"),
+                Arguments.of("Victor, P.~{\\'E}?", "Paul {\\'E}mile Victor and and de la Cierva y Codorn{\\’\\i}u, Juan")
+        );
     }
 
-    private void assertNameFormatA(String string, String string2) {
-        assertNameFormat(string, string2, 1, "{vv~}{ll}{, jj}{, f}?");
+    @ParameterizedTest
+    @MethodSource("provideNames")
+    void formatNameA(String string, String string2) {
+        assertEquals(string, BstNameFormatter.formatName(string2, 1, "{vv~}{ll}{, jj}{, f}?"));
     }
 
     @Test
