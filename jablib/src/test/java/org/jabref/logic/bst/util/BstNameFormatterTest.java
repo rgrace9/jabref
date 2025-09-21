@@ -46,20 +46,20 @@ class BstNameFormatterTest {
 
     @ParameterizedTest
     @CsvSource({
-            "Jonathan Meyer,Jonathan Meyer and Charles Louis Xavier Joseph de la Vall{\\'e}e Poussin",
-            "{\\'{E}}douard Masterly,{\\'{E}}douard Masterly",
-            "Ulrich {\\\"{U}}nderwood,Ulrich {\\\"{U}}nderwood and Ned {\\~N}et and Paul {\\={P}}ot",
-            "Paul~{\\'E}mile Victor,Paul {\\'E}mile Victor and and de la Cierva y Codorn{\\’\\i}u, Juan"})
+            "Jonathan Meyer, Jonathan Meyer and Charles Louis Xavier Joseph de la Vall{\\'e}e Poussin",
+            "{\\'{E}}douard Masterly, {\\'{E}}douard Masterly",
+            "Ulrich {\\\"{U}}nderwood, Ulrich {\\\"{U}}nderwood and Ned {\\~N}et and Paul {\\={P}}ot",
+            "Paul~{\\'E}mile Victor, Paul {\\'E}mile Victor and and de la Cierva y Codorn{\\’\\i}u, Juan"})
     void formatNameC(String string, String string2) {
         assertEquals(string, BstNameFormatter.formatName(string2, 1, "{ff }{vv }{ll}{ jj}"));
     }
 
     @ParameterizedTest
     @CsvSource({
-            "J.~Meyer,Jonathan Meyer and Charles Louis Xavier Joseph de la Vall{\\'e}e Poussin",
-            "{\\'{E}}.~Masterly,{\\'{E}}douard Masterly",
-            "U.~{\\\"{U}}nderwood,Ulrich {\\\"{U}}nderwood and Ned {\\~N}et and Paul {\\={P}}ot",
-            "P.~{\\'E}. Victor,Paul {\\'E}mile Victor and and de la Cierva y Codorn{\\’\\i}u, Juan"
+            "J.~Meyer, Jonathan Meyer and Charles Louis Xavier Joseph de la Vall{\\'e}e Poussin",
+            "{\\'{E}}.~Masterly, {\\'{E}}douard Masterly",
+            "U.~{\\\"{U}}nderwood, Ulrich {\\\"{U}}nderwood and Ned {\\~N}et and Paul {\\={P}}ot",
+            "P.~{\\'E}. Victor, Paul {\\'E}mile Victor and and de la Cierva y Codorn{\\’\\i}u, Juan"
     })
     void formatNameB(String string, String string2) {
         assertEquals(string, BstNameFormatter.formatName(string2, 1, "{f.~}{vv~}{ll}{, jj}"));
@@ -101,23 +101,22 @@ class BstNameFormatterTest {
         assertEquals("{HE{L{}L}O}", sb.toString());
     }
 
-    @Test
-    void getFirstCharOfString() {
-        assertEquals("C", BstNameFormatter.getFirstCharOfString("Charles"));
-        assertEquals("V", BstNameFormatter.getFirstCharOfString("Vall{\\'e}e"));
-        assertEquals("{\\'e}", BstNameFormatter.getFirstCharOfString("{\\'e}"));
-        assertEquals("{\\'e", BstNameFormatter.getFirstCharOfString("{\\'e"));
-        assertEquals("E", BstNameFormatter.getFirstCharOfString("{E"));
+    @ParameterizedTest
+    @CsvSource({"C, Charles", "V, Vall{\\'e}e", "{\\'e}, {\\'e}", "{\\'e, {\\'e", "E, {E"})
+    void getFirstCharOfString(String expected, String s) {
+        assertEquals(expected, BstNameFormatter.getFirstCharOfString(s));
     }
 
-    @Test
-    void numberOfChars() {
-        assertEquals(6, BstNameFormatter.numberOfChars("Vall{\\'e}e", -1));
-        assertEquals(2, BstNameFormatter.numberOfChars("Vall{\\'e}e", 2));
-        assertEquals(1, BstNameFormatter.numberOfChars("Vall{\\'e}e", 1));
-        assertEquals(6, BstNameFormatter.numberOfChars("Vall{\\'e}e", 6));
-        assertEquals(6, BstNameFormatter.numberOfChars("Vall{\\'e}e", 7));
-        assertEquals(8, BstNameFormatter.numberOfChars("Vall{e}e", -1));
-        assertEquals(6, BstNameFormatter.numberOfChars("Vall{\\'e this will be skipped}e", -1));
+    @ParameterizedTest
+    @CsvSource({"6, Vall{\\'e}e, -1",
+            "2, Vall{\\'e}e, 2",
+            "1, Vall{\\'e}e, 1",
+            "6, Vall{\\'e}e, 6",
+            "6, Vall{\\'e}e, 7",
+            "8, Vall{e}e, -1",
+            "6, Vall{\\'e this will be skipped}e, -1"
+    })
+    void numberOfChars(int expected, String token, int inStop) {
+        assertEquals(expected, BstNameFormatter.numberOfChars(token, inStop));
     }
 }
