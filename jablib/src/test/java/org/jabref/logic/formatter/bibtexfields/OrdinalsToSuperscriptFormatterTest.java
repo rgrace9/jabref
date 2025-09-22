@@ -2,6 +2,8 @@ package org.jabref.logic.formatter.bibtexfields;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -17,20 +19,26 @@ class OrdinalsToSuperscriptFormatterTest {
         formatter = new OrdinalsToSuperscriptFormatter();
     }
 
-    @Test
-    void replacesSuperscript() {
-        expectCorrect("1st", "1\\textsuperscript{st}");
-        expectCorrect("2nd", "2\\textsuperscript{nd}");
-        expectCorrect("3rd", "3\\textsuperscript{rd}");
-        expectCorrect("4th", "4\\textsuperscript{th}");
-        expectCorrect("21th", "21\\textsuperscript{th}");
+    @ParameterizedTest
+    @CsvSource({
+            "1st, 1\\textsuperscript{st}",
+            "2nd, 2\\textsuperscript{nd}",
+            "3rd, 3\\textsuperscript{rd}",
+            "4th, 4\\textsuperscript{th}",
+            "21th, 21\\textsuperscript{th}"
+    })
+    void replacesSuperscript(String input, String expected) {
+        expectCorrect(input, expected);
     }
 
-    @Test
-    void replaceSuperscriptsIgnoresCase() {
-        expectCorrect("1st", "1\\textsuperscript{st}");
-        expectCorrect("1ST", "1\\textsuperscript{ST}");
-        expectCorrect("1sT", "1\\textsuperscript{sT}");
+    @ParameterizedTest
+    @CsvSource({
+            "1st, 1\\textsuperscript{st}",
+            "1ST, 1\\textsuperscript{ST}",
+            "1sT, 1\\textsuperscript{sT}"
+    })
+    void replaceSuperscriptsIgnoresCase(String input, String expected) {
+        expectCorrect(input, expected);
     }
 
     @Test
