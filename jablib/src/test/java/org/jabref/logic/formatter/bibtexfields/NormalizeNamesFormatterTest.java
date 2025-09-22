@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -167,11 +168,14 @@ class NormalizeNamesFormatterTest {
         assertEquals("der Barbar, Canon and der Große, Alexander and der Alexander, Peter", formatter.format("Canon der Barbar, Alexander der Große, Peter der Alexander"));
     }
 
-    @Test
-    void upperCaseSensitiveList() {
-        assertEquals("der Barbar, Canon and der Große, Alexander", formatter.format("Canon der Barbar AND Alexander der Große"));
-        assertEquals("der Barbar, Canon and der Große, Alexander", formatter.format("Canon der Barbar aNd Alexander der Große"));
-        assertEquals("der Barbar, Canon and der Große, Alexander", formatter.format("Canon der Barbar AnD Alexander der Große"));
+    @ParameterizedTest
+    @ValueSource(strings = {
+            "Canon der Barbar AND Alexander der Große",
+            "Canon der Barbar aNd Alexander der Große",
+            "Canon der Barbar AnD Alexander der Große"
+    })
+    void upperCaseSensitiveList(String nameList) {
+        assertEquals("der Barbar, Canon and der Große, Alexander", formatter.format(nameList));
     }
 
     @Test
