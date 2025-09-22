@@ -178,11 +178,14 @@ class NormalizeNamesFormatterTest {
         assertEquals("der Barbar, Canon and der Große, Alexander", formatter.format(nameList));
     }
 
-    @Test
-    void semiCorrectNamesWithSemicolon() {
-        assertEquals("Last, First and Last2, First2 and Last3, First3", formatter.format("Last, First; Last2, First2; Last3, First3"));
-        assertEquals("Last, Jr, First and Last2, First2", formatter.format("Last, Jr, First; Last2, First2"));
-        assertEquals("Last, First and Last2, First2 and Last3, First3 and Last4, First4", formatter.format("Last, First; Last2, First2; Last3, First3; First4 Last4"));
-        assertEquals("Last and Last2, First2 and Last3, First3 and Last4, First4", formatter.format("Last; Last2, First2; Last3, First3; Last4, First4"));
+    @ParameterizedTest
+    @CsvSource({
+            "'Last, First and Last2, First2 and Last3, First3', 'Last, First; Last2, First2; Last3, First3'",
+            "'Last, Jr, First and Last2, First2', 'Last, Jr, First; Last2, First2'",
+            "'Last, First and Last2, First2 and Last3, First3 and Last4, First4', 'Last, First and Last2, First2 and Last3, First3 and Last4, First4'",
+            "'Last and Last2, First2 and Last3, First3 and Last4, First4', 'Last; Last2, First2; Last3, First3; Last4, First4'"
+    })
+    void semiCorrectNamesWithSemicolon(String expected, String nameList) {
+        assertEquals(expected, formatter.format(nameList));
     }
 }
