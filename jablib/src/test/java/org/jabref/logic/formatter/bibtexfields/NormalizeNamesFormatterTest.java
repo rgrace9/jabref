@@ -96,10 +96,13 @@ class NormalizeNamesFormatterTest {
         assertEquals("Name, della, first", formatter.format("Name, della, first"));
     }
 
-    @Test
-    void concatenationOfAuthorsWithCommas() {
-        assertEquals("Ali Babar, M. and Dingsøyr, T. and Lago, P. and van der Vliet, H.", formatter.format("Ali Babar, M., Dingsøyr, T., Lago, P., van der Vliet, H."));
-        assertEquals("Ali Babar, M.", formatter.format("Ali Babar, M."));
+    @ParameterizedTest
+    @CsvSource({
+            "'Ali Babar, M. and Dingsøyr, T. and Lago, P. and van der Vliet, H.', 'Ali Babar, M., Dingsøyr, T., Lago, P., van der Vliet, H.'",
+            "'Ali Babar, M.', 'Ali Babar, M.'"
+    })
+    void concatenationOfAuthorsWithCommas(String expected, String nameList) {
+        assertEquals(expected, formatter.format(nameList));
     }
 
     @Test
