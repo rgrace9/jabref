@@ -2,6 +2,8 @@ package org.jabref.logic.formatter.bibtexfields;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -17,29 +19,22 @@ class NormalizeNamesFormatterTest {
         formatter = new NormalizeNamesFormatter();
     }
 
-    @Test
-    void normalizeAuthorList() {
-        assertEquals("{Society of Automotive Engineers}", formatter.format("{Society of Automotive Engineers}"));
-        assertEquals("{Company Name, LLC}", formatter.format("{Company Name, LLC}"));
-
-        assertEquals("Bilbo, Staci D.", formatter.format("Staci D Bilbo"));
-        assertEquals("Bilbo, Staci D.", formatter.format("Staci D. Bilbo"));
-
-        assertEquals("Bilbo, Staci D. and Smith, S. H. and Schwarz, Jaclyn M.", formatter.format("Staci D Bilbo and Smith SH and Jaclyn M Schwarz"));
-
-        assertEquals("Ølver, M. A.", formatter.format("Ølver MA"));
-
-        assertEquals("Ølver, M. A. and Øie, G. G. and Øie, G. G. and Alfredsen, J. Å. Å. and Alfredsen, Jo and Olsen, Y. Y. and Olsen, Y. Y.",
-                formatter.format("Ølver MA; GG Øie; Øie GG; Alfredsen JÅÅ; Jo Alfredsen; Olsen Y.Y. and Olsen YY."));
-
-        assertEquals("Ølver, M. A. and Øie, G. G. and Øie, G. G. and Alfredsen, J. Å. Å. and Alfredsen, Jo and Olsen, Y. Y. and Olsen, Y. Y.",
-                formatter.format("Ølver MA; GG Øie; Øie GG; Alfredsen JÅÅ; Jo Alfredsen; Olsen Y.Y.; Olsen YY."));
-
-        assertEquals("Alver, Morten and Alver, Morten O. and Alfredsen, J. A. and Olsen, Y. Y.", formatter.format("Alver, Morten and Alver, Morten O and Alfredsen, JA and Olsen, Y.Y."));
-
-        assertEquals("Alver, M. A. and Alfredsen, J. A. and Olsen, Y. Y.", formatter.format("Alver, MA; Alfredsen, JA; Olsen Y.Y."));
-
-        assertEquals("Kolb, Stefan and Lenhard, J{\\\"o}rg and Wirtz, Guido", formatter.format("Kolb, Stefan and J{\\\"o}rg Lenhard and Wirtz, Guido"));
+    @ParameterizedTest
+    @CsvSource({
+            "{Society of Automotive Engineers}, {Society of Automotive Engineers}",
+            "'{Company Name, LLC}', '{Company Name, LLC}'",
+            "'Bilbo, Staci D.', Staci D Bilbo",
+            "'Bilbo, Staci D.', Staci D. Bilbo",
+            "'Bilbo, Staci D. and Smith, S. H. and Schwarz, Jaclyn M.', Staci D Bilbo and Smith SH and Jaclyn M Schwarz",
+            "'Ølver, M. A.', Ølver MA",
+            "'Ølver, M. A. and Øie, G. G. and Øie, G. G. and Alfredsen, J. Å. Å. and Alfredsen, Jo and Olsen, Y. Y. and Olsen, Y. Y.', Ølver MA; GG Øie; Øie GG; Alfredsen JÅÅ; Jo Alfredsen; Olsen Y.Y. and Olsen YY.",
+            "'Ølver, M. A. and Øie, G. G. and Øie, G. G. and Alfredsen, J. Å. Å. and Alfredsen, Jo and Olsen, Y. Y. and Olsen, Y. Y.', Ølver MA; GG Øie; Øie GG; Alfredsen JÅÅ; Jo Alfredsen; Olsen Y.Y.; Olsen YY.",
+            "'Alver, Morten and Alver, Morten O. and Alfredsen, J. A. and Olsen, Y. Y.', 'Alver, Morten and Alver, Morten O and Alfredsen, JA and Olsen, Y.Y.'",
+            "'Alver, M. A. and Alfredsen, J. A. and Olsen, Y. Y.', 'Alver, MA; Alfredsen, JA; Olsen Y.Y.'",
+            "'Kolb, Stefan and Lenhard, J{\\\"o}rg and Wirtz, Guido', 'Kolb, Stefan and J{\\\"o}rg Lenhard and Wirtz, Guido'"
+    })
+    void normalizeAuthorList(String expected, String nameList) {
+        assertEquals(expected, formatter.format(nameList));
     }
 
     @Test
