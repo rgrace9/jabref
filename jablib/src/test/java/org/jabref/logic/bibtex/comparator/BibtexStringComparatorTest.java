@@ -44,12 +44,12 @@ class BibtexStringComparatorTest {
 
     @Test
     void compareSameContentWithInternalCheckingEnabled() {
-          assertEquals(0, bsc2.compare(bs2, bs3), "Different strings do not contain the same content [internal checking enabled]");
+        assertEquals(0, bsc2.compare(bs2, bs3), "Different strings do not contain the same content [internal checking enabled]");
     }
 
     @Test
     void compareStringsReverseAlphabeticallyOrderedWithInternalCheckingEnabled() {
-      assertTrue(bsc2.compare(bs1, bs2) > 0, "bs1 does not succeed bs2 [internal checking enabled]");
+        assertTrue(bsc2.compare(bs1, bs2) > 0, "bs1 does not succeed bs2 [internal checking enabled]");
     }
 
     @Test

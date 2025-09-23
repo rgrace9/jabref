@@ -70,7 +70,7 @@ class BstNameFormatterTest {
 
     @ParameterizedTest
     @MethodSource("provideNamesB")
-        void formatNameB(String expected, String authorList) {
+    void formatNameB(String expected, String authorList) {
         assertEquals(expected, BstNameFormatter.formatName(authorList, 1, "{f.~}{vv~}{ll}{, jj}"));
     }
 
