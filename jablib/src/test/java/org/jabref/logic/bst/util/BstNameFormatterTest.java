@@ -44,19 +44,19 @@ class BstNameFormatterTest {
         assertEquals("dlVP", BstNameFormatter.formatName(list.getAuthor(0), "{v{}}{l{}}"));
     }
 
-    static Stream<Arguments> provideNamesC() {
+    static Stream<Arguments> provideNamesA() {
         return Stream.of(
-                Arguments.of("Jonathan Meyer", "Jonathan Meyer and Charles Louis Xavier Joseph de la Vall{\\'e}e Poussin"),
-                Arguments.of("{\\'{E}}douard Masterly", "{\\'{E}}douard Masterly"),
-                Arguments.of("Ulrich {\\\"{U}}nderwood", "Ulrich {\\\"{U}}nderwood and Ned {\\~N}et and Paul {\\={P}}ot"),
-                Arguments.of("Paul~{\\'E}mile Victor", "Paul {\\'E}mile Victor and and de la Cierva y Codorn{\\’\\i}u, Juan")
+                Arguments.of("Meyer, J?", "Jonathan Meyer and Charles Louis Xavier Joseph de la Vall{\\'e}e Poussin"),
+                Arguments.of("Masterly, {\\'{E}}?", "{\\'{E}}douard Masterly"),
+                Arguments.of("{\\\"{U}}nderwood, U?", "Ulrich {\\\"{U}}nderwood and Ned {\\~N}et and Paul {\\={P}}ot"),
+                Arguments.of("Victor, P.~{\\'E}?", "Paul {\\'E}mile Victor and and de la Cierva y Codorn{\\’\\i}u, Juan")
         );
     }
 
     @ParameterizedTest
-    @MethodSource("provideNamesC")
-    void formatNameC(String expected, String authorList) {
-        assertEquals(expected, BstNameFormatter.formatName(authorList, 1, "{ff }{vv }{ll}{ jj}"));
+    @MethodSource("provideNamesA")
+    void formatNameA(String expected, String string) {
+        assertEquals(expected, BstNameFormatter.formatName(string, 1, "{vv~}{ll}{, jj}{, f}?"));
     }
 
     static Stream<Arguments> provideNamesB() {
@@ -74,19 +74,19 @@ class BstNameFormatterTest {
         assertEquals(expected, BstNameFormatter.formatName(authorList, 1, "{f.~}{vv~}{ll}{, jj}"));
     }
 
-    static Stream<Arguments> provideNamesA() {
+    static Stream<Arguments> provideNamesC() {
         return Stream.of(
-                Arguments.of("Meyer, J?", "Jonathan Meyer and Charles Louis Xavier Joseph de la Vall{\\'e}e Poussin"),
-                Arguments.of("Masterly, {\\'{E}}?", "{\\'{E}}douard Masterly"),
-                Arguments.of("{\\\"{U}}nderwood, U?", "Ulrich {\\\"{U}}nderwood and Ned {\\~N}et and Paul {\\={P}}ot"),
-                Arguments.of("Victor, P.~{\\'E}?", "Paul {\\'E}mile Victor and and de la Cierva y Codorn{\\’\\i}u, Juan")
+                Arguments.of("Jonathan Meyer", "Jonathan Meyer and Charles Louis Xavier Joseph de la Vall{\\'e}e Poussin"),
+                Arguments.of("{\\'{E}}douard Masterly", "{\\'{E}}douard Masterly"),
+                Arguments.of("Ulrich {\\\"{U}}nderwood", "Ulrich {\\\"{U}}nderwood and Ned {\\~N}et and Paul {\\={P}}ot"),
+                Arguments.of("Paul~{\\'E}mile Victor", "Paul {\\'E}mile Victor and and de la Cierva y Codorn{\\’\\i}u, Juan")
         );
     }
 
     @ParameterizedTest
-    @MethodSource("provideNamesA")
-    void formatNameA(String expected, String string) {
-        assertEquals(expected, BstNameFormatter.formatName(string, 1, "{vv~}{ll}{, jj}{, f}?"));
+    @MethodSource("provideNamesC")
+    void formatNameC(String expected, String authorList) {
+        assertEquals(expected, BstNameFormatter.formatName(authorList, 1, "{ff }{vv }{ll}{ jj}"));
     }
 
     @Test
