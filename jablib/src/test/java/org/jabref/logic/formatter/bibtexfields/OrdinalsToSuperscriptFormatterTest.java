@@ -28,7 +28,7 @@ class OrdinalsToSuperscriptFormatterTest {
             "21\\textsuperscript{th}, 21th"
     })
     void replacesSuperscript(String expected, String input) {
-        expectCorrect(input, expected);
+        expectCorrect(expected, input);
     }
 
     @ParameterizedTest
@@ -38,28 +38,26 @@ class OrdinalsToSuperscriptFormatterTest {
             "1\\textsuperscript{sT}, 1sT"
     })
     void replaceSuperscriptsIgnoresCase(String expected, String input) {
-        expectCorrect(input, expected);
+        expectCorrect(expected, input);
     }
 
     @Test
     void replaceSuperscriptsInMultilineStrings() {
         expectCorrect(
-                "replace on 1st line\nand on 2nd line.",
-                "replace on 1\\textsuperscript{st} line\nand on 2\\textsuperscript{nd} line."
+                "replace on 1\\textsuperscript{st} line\nand on 2\\textsuperscript{nd} line.", "replace on 1st line\nand on 2nd line."
         );
     }
 
     @Test
     void replaceAllSuperscripts() {
         expectCorrect(
-                "1st 2nd 3rd 4th",
-                "1\\textsuperscript{st} 2\\textsuperscript{nd} 3\\textsuperscript{rd} 4\\textsuperscript{th}"
+                "1\\textsuperscript{st} 2\\textsuperscript{nd} 3\\textsuperscript{rd} 4\\textsuperscript{th}", "1st 2nd 3rd 4th"
         );
     }
 
     @Test
     void ignoreSuperscriptsInsideWords() {
-        expectCorrect("1st 1stword words1st inside1stwords", "1\\textsuperscript{st} 1stword words1st inside1stwords");
+        expectCorrect("1\\textsuperscript{st} 1stword words1st inside1stwords", "1st 1stword words1st inside1stwords");
     }
 
     @Test
@@ -67,7 +65,7 @@ class OrdinalsToSuperscriptFormatterTest {
         assertEquals("11\\textsuperscript{th}", formatter.format(formatter.getExampleInput()));
     }
 
-    private void expectCorrect(String input, String expected) {
+    private void expectCorrect(String expected, String input) {
         assertEquals(expected, formatter.format(input));
     }
 }
