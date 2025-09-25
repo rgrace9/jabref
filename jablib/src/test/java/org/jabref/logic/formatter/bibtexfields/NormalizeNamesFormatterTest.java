@@ -2,6 +2,9 @@ package org.jabref.logic.formatter.bibtexfields;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -17,29 +20,22 @@ class NormalizeNamesFormatterTest {
         formatter = new NormalizeNamesFormatter();
     }
 
-    @Test
-    void normalizeAuthorList() {
-        assertEquals("{Society of Automotive Engineers}", formatter.format("{Society of Automotive Engineers}"));
-        assertEquals("{Company Name, LLC}", formatter.format("{Company Name, LLC}"));
-
-        assertEquals("Bilbo, Staci D.", formatter.format("Staci D Bilbo"));
-        assertEquals("Bilbo, Staci D.", formatter.format("Staci D. Bilbo"));
-
-        assertEquals("Bilbo, Staci D. and Smith, S. H. and Schwarz, Jaclyn M.", formatter.format("Staci D Bilbo and Smith SH and Jaclyn M Schwarz"));
-
-        assertEquals("Ølver, M. A.", formatter.format("Ølver MA"));
-
-        assertEquals("Ølver, M. A. and Øie, G. G. and Øie, G. G. and Alfredsen, J. Å. Å. and Alfredsen, Jo and Olsen, Y. Y. and Olsen, Y. Y.",
-                formatter.format("Ølver MA; GG Øie; Øie GG; Alfredsen JÅÅ; Jo Alfredsen; Olsen Y.Y. and Olsen YY."));
-
-        assertEquals("Ølver, M. A. and Øie, G. G. and Øie, G. G. and Alfredsen, J. Å. Å. and Alfredsen, Jo and Olsen, Y. Y. and Olsen, Y. Y.",
-                formatter.format("Ølver MA; GG Øie; Øie GG; Alfredsen JÅÅ; Jo Alfredsen; Olsen Y.Y.; Olsen YY."));
-
-        assertEquals("Alver, Morten and Alver, Morten O. and Alfredsen, J. A. and Olsen, Y. Y.", formatter.format("Alver, Morten and Alver, Morten O and Alfredsen, JA and Olsen, Y.Y."));
-
-        assertEquals("Alver, M. A. and Alfredsen, J. A. and Olsen, Y. Y.", formatter.format("Alver, MA; Alfredsen, JA; Olsen Y.Y."));
-
-        assertEquals("Kolb, Stefan and Lenhard, J{\\\"o}rg and Wirtz, Guido", formatter.format("Kolb, Stefan and J{\\\"o}rg Lenhard and Wirtz, Guido"));
+    @ParameterizedTest
+    @CsvSource({
+            "{Society of Automotive Engineers}, {Society of Automotive Engineers}",
+            "'{Company Name, LLC}', '{Company Name, LLC}'",
+            "'Bilbo, Staci D.', Staci D Bilbo",
+            "'Bilbo, Staci D.', Staci D. Bilbo",
+            "'Bilbo, Staci D. and Smith, S. H. and Schwarz, Jaclyn M.', Staci D Bilbo and Smith SH and Jaclyn M Schwarz",
+            "'Ølver, M. A.', Ølver MA",
+            "'Ølver, M. A. and Øie, G. G. and Øie, G. G. and Alfredsen, J. Å. Å. and Alfredsen, Jo and Olsen, Y. Y. and Olsen, Y. Y.', Ølver MA; GG Øie; Øie GG; Alfredsen JÅÅ; Jo Alfredsen; Olsen Y.Y. and Olsen YY.",
+            "'Ølver, M. A. and Øie, G. G. and Øie, G. G. and Alfredsen, J. Å. Å. and Alfredsen, Jo and Olsen, Y. Y. and Olsen, Y. Y.', Ølver MA; GG Øie; Øie GG; Alfredsen JÅÅ; Jo Alfredsen; Olsen Y.Y.; Olsen YY.",
+            "'Alver, Morten and Alver, Morten O. and Alfredsen, J. A. and Olsen, Y. Y.', 'Alver, Morten and Alver, Morten O and Alfredsen, JA and Olsen, Y.Y.'",
+            "'Alver, M. A. and Alfredsen, J. A. and Olsen, Y. Y.', 'Alver, MA; Alfredsen, JA; Olsen Y.Y.'",
+            "'Kolb, Stefan and Lenhard, J{\\\"o}rg and Wirtz, Guido', 'Kolb, Stefan and J{\\\"o}rg Lenhard and Wirtz, Guido'"
+    })
+    void normalizeAuthorList(String expected, String nameList) {
+        assertEquals(expected, formatter.format(nameList));
     }
 
     @Test
@@ -101,10 +97,13 @@ class NormalizeNamesFormatterTest {
         assertEquals("Name, della, first", formatter.format("Name, della, first"));
     }
 
-    @Test
-    void concatenationOfAuthorsWithCommas() {
-        assertEquals("Ali Babar, M. and Dingsøyr, T. and Lago, P. and van der Vliet, H.", formatter.format("Ali Babar, M., Dingsøyr, T., Lago, P., van der Vliet, H."));
-        assertEquals("Ali Babar, M.", formatter.format("Ali Babar, M."));
+    @ParameterizedTest
+    @CsvSource({
+            "'Ali Babar, M. and Dingsøyr, T. and Lago, P. and van der Vliet, H.', 'Ali Babar, M., Dingsøyr, T., Lago, P., van der Vliet, H.'",
+            "'Ali Babar, M.', 'Ali Babar, M.'"
+    })
+    void concatenationOfAuthorsWithCommas(String expected, String nameList) {
+        assertEquals(expected, formatter.format(nameList));
     }
 
     @Test
@@ -169,18 +168,24 @@ class NormalizeNamesFormatterTest {
         assertEquals("der Barbar, Canon and der Große, Alexander and der Alexander, Peter", formatter.format("Canon der Barbar, Alexander der Große, Peter der Alexander"));
     }
 
-    @Test
-    void upperCaseSensitiveList() {
-        assertEquals("der Barbar, Canon and der Große, Alexander", formatter.format("Canon der Barbar AND Alexander der Große"));
-        assertEquals("der Barbar, Canon and der Große, Alexander", formatter.format("Canon der Barbar aNd Alexander der Große"));
-        assertEquals("der Barbar, Canon and der Große, Alexander", formatter.format("Canon der Barbar AnD Alexander der Große"));
+    @ParameterizedTest
+    @ValueSource(strings = {
+            "Canon der Barbar AND Alexander der Große",
+            "Canon der Barbar aNd Alexander der Große",
+            "Canon der Barbar AnD Alexander der Große"
+    })
+    void upperCaseSensitiveList(String nameList) {
+        assertEquals("der Barbar, Canon and der Große, Alexander", formatter.format(nameList));
     }
 
-    @Test
-    void semiCorrectNamesWithSemicolon() {
-        assertEquals("Last, First and Last2, First2 and Last3, First3", formatter.format("Last, First; Last2, First2; Last3, First3"));
-        assertEquals("Last, Jr, First and Last2, First2", formatter.format("Last, Jr, First; Last2, First2"));
-        assertEquals("Last, First and Last2, First2 and Last3, First3 and Last4, First4", formatter.format("Last, First; Last2, First2; Last3, First3; First4 Last4"));
-        assertEquals("Last and Last2, First2 and Last3, First3 and Last4, First4", formatter.format("Last; Last2, First2; Last3, First3; Last4, First4"));
+    @ParameterizedTest
+    @CsvSource({
+            "'Last, First and Last2, First2 and Last3, First3', 'Last, First; Last2, First2; Last3, First3'",
+            "'Last, Jr, First and Last2, First2', 'Last, Jr, First; Last2, First2'",
+            "'Last, First and Last2, First2 and Last3, First3 and Last4, First4', 'Last, First and Last2, First2 and Last3, First3 and Last4, First4'",
+            "'Last and Last2, First2 and Last3, First3 and Last4, First4', 'Last; Last2, First2; Last3, First3; Last4, First4'"
+    })
+    void semiCorrectNamesWithSemicolon(String expected, String nameList) {
+        assertEquals(expected, formatter.format(nameList));
     }
 }
