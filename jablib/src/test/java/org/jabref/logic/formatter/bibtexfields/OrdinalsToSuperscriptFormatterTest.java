@@ -21,23 +21,23 @@ class OrdinalsToSuperscriptFormatterTest {
 
     @ParameterizedTest
     @CsvSource({
-            "1st, 1\\textsuperscript{st}",
-            "2nd, 2\\textsuperscript{nd}",
-            "3rd, 3\\textsuperscript{rd}",
-            "4th, 4\\textsuperscript{th}",
-            "21th, 21\\textsuperscript{th}"
+            "1\\textsuperscript{st}, 1st",
+            "2\\textsuperscript{nd}, 2nd",
+            "3\\textsuperscript{rd}, 3rd,",
+            "4\\textsuperscript{th}, 4th",
+            "21\\textsuperscript{th}, 21th"
     })
-    void replacesSuperscript(String input, String expected) {
+    void replacesSuperscript(String expected, String input) {
         expectCorrect(input, expected);
     }
 
     @ParameterizedTest
     @CsvSource({
-            "1st, 1\\textsuperscript{st}",
-            "1ST, 1\\textsuperscript{ST}",
-            "1sT, 1\\textsuperscript{sT}"
+            "1\\textsuperscript{st}, 1st",
+            "1\\textsuperscript{ST}, 1ST",
+            "1\\textsuperscript{sT}, 1sT"
     })
-    void replaceSuperscriptsIgnoresCase(String input, String expected) {
+    void replaceSuperscriptsIgnoresCase(String expected, String input) {
         expectCorrect(input, expected);
     }
 
