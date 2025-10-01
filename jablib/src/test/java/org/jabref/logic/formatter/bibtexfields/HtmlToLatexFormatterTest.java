@@ -2,6 +2,8 @@ package org.jabref.logic.formatter.bibtexfields;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -42,12 +44,10 @@ class HtmlToLatexFormatterTest {
         assertEquals("aaa", formatter.format("aaa"));
     }
 
-    @Test
-    void html() {
-        assertEquals("{\\\"{a}}", formatter.format("&auml;"));
-        assertEquals("{\\\"{a}}", formatter.format("&#228;"));
-        assertEquals("{\\\"{a}}", formatter.format("&#xe4;"));
-        assertEquals("{{$\\Epsilon$}}", formatter.format("&Epsilon;"));
+    @ParameterizedTest
+    @CsvSource({"{\\\"{a}}, &auml;", "{\\\"{a}}, &#228;", "{\\\"{a}}, &#xe4;", "{{$\\Epsilon$}}, &Epsilon;"})
+    void html(String expected, String text) {
+        assertEquals(expected, formatter.format(text));
     }
 
     @Test
@@ -55,12 +55,10 @@ class HtmlToLatexFormatterTest {
         assertEquals("aaa", formatter.format("<b>aaa</b>"));
     }
 
-    @Test
-    void htmlCombiningAccents() {
-        assertEquals("{\\\"{a}}", formatter.format("a&#776;"));
-        assertEquals("{\\\"{a}}", formatter.format("a&#x308;"));
-        assertEquals("{\\\"{a}}b", formatter.format("a&#776;b"));
-        assertEquals("{\\\"{a}}b", formatter.format("a&#x308;b"));
+    @ParameterizedTest
+    @CsvSource({"{\\\"{a}}, a&#776;", "{\\\"{a}}, a&#x308;", "{\\\"{a}}b, a&#776;b", "{\\\"{a}}b, a&#x308;b"})
+    void htmlCombiningAccents(String expected, String text) {
+        assertEquals(expected, formatter.format(text));
     }
 
     @Test
