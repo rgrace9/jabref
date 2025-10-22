@@ -39,7 +39,7 @@ public class LinkedFile implements Serializable {
     private static final String REGEX_URL = "^((?:https?\\:\\/\\/|www\\.)(?:[-a-z0-9]+\\.)*[-a-z0-9]+.*)";
     private static final Pattern URL_PATTERN = Pattern.compile(REGEX_URL);
 
-    private static final LinkedFile NULL_OBJECT = new LinkedFile("", Path.of("").toString(), "", "");
+    private static final LinkedFile NULL_OBJECT = new LinkedFile("", "", "", "");
 
     // We have to mark these properties as transient because they can't be serialized directly
     private transient StringProperty description = new SimpleStringProperty();
@@ -57,6 +57,55 @@ public class LinkedFile implements Serializable {
         setLink(link);
         this.fileType.setValue(fileType);
         this.sourceURL.setValue(sourceUrl);
+    }
+
+    // String-based methods
+    /**
+     * Constructs a new {@link LinkedFile}.
+     *
+     * @param description a description of the file
+     * @param link the link to the file
+     * @param fileType the type of the file
+     * @return a new {@link LinkedFile} instance
+     */
+    public static LinkedFile of(String description, String link, FileType fileType) {
+        return new LinkedFile(description, link, fileType.getName(), "");
+    }
+
+    /**
+     * Constructs a new {@link LinkedFile}.
+     *
+     * @param description a description of the file
+     * @param link the link to the file
+     * @param fileType the name of file type
+     * @return a new {@link LinkedFile} instance
+     */
+    public static LinkedFile of(String description, String link, String fileType) {
+        return new LinkedFile(description, link, fileType, "");
+    }
+
+    /**
+     * Constructs a new {@link LinkedFile}.
+     *
+     * @param description a description of the file
+     * @param link the path to the file
+     * @param fileType the name of the file type
+     * @param sourceUrl the webpage where the file link came from
+     * @return a new {@link LinkedFile} instance
+     */
+    public static LinkedFile of(String description, String link, String fileType, String sourceUrl) {
+        return new LinkedFile(description, link, fileType, sourceUrl);
+    }
+
+    // Path-based methods
+    /**
+     * Constructs a new {@link LinkedFile} with an empty file type and an empty description.
+     *
+     * @param link the path to the file
+     * @return a new {@link LinkedFile} instance
+     */
+    public static LinkedFile of(Path link) {
+        return new LinkedFile("", link.toString(), "", "");
     }
 
     /**
@@ -84,30 +133,7 @@ public class LinkedFile implements Serializable {
         return new LinkedFile(description, link.toString(), fileType, sourceUrl);
     }
 
-    /**
-     * Constructs a new {@link LinkedFile}.
-     *
-     * @param description a description of the file
-     * @param link the URL of the file
-     * @param fileType the type of the file
-     * @return a new {@link LinkedFile} instance
-     */
-    public static LinkedFile of(String description, String link, FileType fileType) {
-        return new LinkedFile(description, link, fileType.getName(), "");
-    }
-
-    /**
-     * Constructs a new {@link LinkedFile}.
-     *
-     * @param description a description of the file
-     * @param link the URL of the file
-     * @param fileType the name of file type
-     * @return a new {@link LinkedFile} instance
-     */
-    public static LinkedFile of(String description, String link, String fileType) {
-        return new LinkedFile(description, link, fileType, "");
-    }
-
+    // URL-based methods
     /**
      * Constructs a new {@link LinkedFile}.
      *
@@ -142,16 +168,6 @@ public class LinkedFile implements Serializable {
      */
     public static LinkedFile of(String description, URL link, String fileType, String sourceUrl) {
         return new LinkedFile(description, link.toString(), fileType, sourceUrl);
-    }
-
-    /**
-     * Constructs a new {@link LinkedFile} with an empty file type and an empty description.
-     *
-     * @param link the URL of the file
-     * @return a new {@link LinkedFile} instance
-     */
-    public static LinkedFile of(Path link) {
-        return new LinkedFile("", link.toString(), "", "");
     }
 
     public StringProperty descriptionProperty() {
