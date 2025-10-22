@@ -59,36 +59,96 @@ public class LinkedFile implements Serializable {
         this.sourceURL.setValue(sourceUrl);
     }
 
+    /**
+     * Constructs a new {@link LinkedFile}.
+     *
+     * @param description a description of the file
+     * @param link the path to the file
+     * @param fileType the name of the file type
+     * @return a new {@link LinkedFile} instance
+     */
     public static LinkedFile of(String description, Path link, String fileType) {
         return new LinkedFile(description, link.toString(), fileType, "");
     }
 
+    /**
+     * Constructs a new {@link LinkedFile}.
+     *
+     * @param description a description of the file
+     * @param link the path to the file
+     * @param fileType the name of the file type
+     * @param sourceUrl the webpage where the file link came from
+     * @return a new {@link LinkedFile} instance
+     */
     public static LinkedFile of(String description, Path link, String fileType, String sourceUrl) {
         return new LinkedFile(description, link.toString(), fileType, sourceUrl);
     }
 
+    /**
+     * Constructs a new {@link LinkedFile}.
+     *
+     * @param description a description of the file
+     * @param link the URL of the file
+     * @param fileType the type of the file
+     * @return a new {@link LinkedFile} instance
+     */
     public static LinkedFile of(String description, String link, FileType fileType) {
         return new LinkedFile(description, link, fileType.getName(), "");
     }
 
+    /**
+     * Constructs a new {@link LinkedFile}.
+     *
+     * @param description a description of the file
+     * @param link the URL of the file
+     * @param fileType the name of file type
+     * @return a new {@link LinkedFile} instance
+     */
     public static LinkedFile of(String description, String link, String fileType) {
         return new LinkedFile(description, link, fileType, "");
     }
 
+    /**
+     * Constructs a new {@link LinkedFile}.
+     *
+     * @param link the URL of the file
+     * @param fileType the name of file type
+     * @return a new {@link LinkedFile} instance
+     */
     public static LinkedFile of(URL link, String fileType) {
         return new LinkedFile("", link.toString(), fileType, "");
     }
 
+    /**
+     * Constructs a new {@link LinkedFile}.
+     *
+     * @param description a description of the file
+     * @param link the URL of the file
+     * @param fileType the name of file type
+     * @return a new {@link LinkedFile} instance
+     */
     public static LinkedFile of(String description, URL link, String fileType) {
         return new LinkedFile(description, link.toString(), fileType, "");
     }
 
+    /**
+     * Constructs a new {@link LinkedFile}.
+     *
+     * @param description a description of the file
+     * @param link the URL of the file
+     * @param fileType the name of file type
+     * @param sourceUrl the webpage where the file link came from
+     * @return a new {@link LinkedFile} instance
+     */
     public static LinkedFile of(String description, URL link, String fileType, String sourceUrl) {
         return new LinkedFile(description, link.toString(), fileType, sourceUrl);
     }
 
     /**
-     * Constructs a new LinkedFile with an empty file type and an empty description
+     * Constructs a new {@link LinkedFile} with an empty file type and an empty description.
+     *
+     * @param link the URL of the file
+     * @return a new {@link LinkedFile} instance
      */
     public static LinkedFile of(Path link) {
         return new LinkedFile("", link.toString(), "", "");
