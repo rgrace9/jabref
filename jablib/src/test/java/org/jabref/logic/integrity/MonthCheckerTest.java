@@ -18,8 +18,8 @@ class MonthCheckerTest {
 
     @BeforeEach
     void setUp() {
-        BibDatabaseContext databaseContext = new BibDatabaseContext();
-        BibDatabaseContext databaseBiblatex = new BibDatabaseContext();
+        BibDatabaseContext databaseContext = BibDatabaseContext.empty();
+        BibDatabaseContext databaseBiblatex = BibDatabaseContext.empty();
         databaseContext.setMode(BibDatabaseMode.BIBTEX);
         checker = new MonthChecker(databaseContext);
         databaseBiblatex.setMode(BibDatabaseMode.BIBLATEX);

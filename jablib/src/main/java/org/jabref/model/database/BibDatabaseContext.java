@@ -68,29 +68,81 @@ public class BibDatabaseContext {
     private CoarseChangeFilter dbmsListener;
     private DatabaseLocation location;
 
-    public BibDatabaseContext() {
-        this(new BibDatabase());
+    /**
+     * Builder for creating {@link BibDatabaseContext} instances with optional configuration.
+     * Default values:
+     * database: empty BibDatabase
+     * metaData: empty MetaData
+     * path: null
+     * location: LOCAL
+     **/
+    public static class Builder {
+        private BibDatabase database = new BibDatabase();
+        private MetaData metaData = new MetaData();
+        private Path path;
+        private DatabaseLocation location = DatabaseLocation.LOCAL;
+
+        /**
+         * Sets the database for this context.
+         *
+         * @param database the BibDatabase to use
+         * @return this builder
+         */
+        public Builder database(@NonNull BibDatabase database) {
+            this.database = database;
+            return this;
+        }
+
+        /**
+         * Sets the metadata for this context.
+         *
+         * @param metaData the metadata to use
+         * @return this builder
+         */
+        public Builder metaData(@NonNull MetaData metaData) {
+            this.metaData = metaData;
+            return this;
+        }
+
+        /**
+         * Sets the file path.
+         *
+         * @param path the file path
+         * @return this builder
+         */
+        public Builder path(@NonNull Path path) {
+            this.path = path;
+            return this;
+        }
+
+        /**
+         * Sets the database location.
+         *
+         * @param location the database location (LOCAL or SHARED)
+         * @return this builder
+         */
+        public Builder location(@NonNull DatabaseLocation location) {
+            this.location = location;
+            return this;
+        }
+
+        /**
+         * Builds and returns a new {@link BibDatabaseContext} with the configured values.
+         *
+         * @return a new BibDatabaseContext instance
+         */
+        public BibDatabaseContext build() {
+            return new BibDatabaseContext(this);
+        }
     }
 
-    public BibDatabaseContext(@NonNull BibDatabase database) {
-        this(database, new MetaData());
-    }
+    private BibDatabaseContext(Builder builder) {
+        this.database = builder.database;
+        this.metaData = builder.metaData;
+        this.path = builder.path;
+        this.location = builder.location;
 
-    public BibDatabaseContext(@NonNull BibDatabase database, @NonNull MetaData metaData) {
-        this.database = database;
-        this.metaData = metaData;
-        this.location = DatabaseLocation.LOCAL;
-    }
-
-    public BibDatabaseContext(@NonNull BibDatabase database, @NonNull MetaData metaData, Path path) {
-        this(database, metaData, path, DatabaseLocation.LOCAL);
-    }
-
-    public BibDatabaseContext(@NonNull BibDatabase database, @NonNull MetaData metaData, Path path, @NonNull DatabaseLocation location) {
-        this(database, metaData);
-        this.path = path;
-
-        if (location == DatabaseLocation.LOCAL) {
+        if (this.location == DatabaseLocation.LOCAL) {
             convertToLocalDatabase();
         }
     }
@@ -305,7 +357,7 @@ public class BibDatabaseContext {
     }
 
     public static BibDatabaseContext empty() {
-        return new BibDatabaseContext(new BibDatabase(), new MetaData());
+        return new Builder().build();
     }
 
     @Override

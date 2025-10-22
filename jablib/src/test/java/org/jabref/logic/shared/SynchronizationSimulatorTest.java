@@ -56,12 +56,12 @@ class SynchronizationSimulatorTest {
         FieldPreferences fieldPreferences = mock(FieldPreferences.class);
         when(fieldPreferences.getNonWrappableFields()).thenReturn(FXCollections.observableArrayList());
 
-        clientContextA = new BibDatabaseContext();
+        clientContextA = BibDatabaseContext.empty();
         DBMSSynchronizer synchronizerA = new DBMSSynchronizer(clientContextA, ',', fieldPreferences, pattern, new DummyFileUpdateMonitor(), "UserAndHost");
         clientContextA.convertToSharedDatabase(synchronizerA);
         clientContextA.getDBMSSynchronizer().openSharedDatabase(dbmsConnection);
 
-        clientContextB = new BibDatabaseContext();
+        clientContextB = BibDatabaseContext.empty();
         DBMSSynchronizer synchronizerB = new DBMSSynchronizer(clientContextB, ',', fieldPreferences, pattern, new DummyFileUpdateMonitor(), "UserAndHost");
         clientContextB.convertToSharedDatabase(synchronizerB);
         // use a second connection, because this is another client (typically on another machine)
