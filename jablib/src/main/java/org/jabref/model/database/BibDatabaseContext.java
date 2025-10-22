@@ -88,7 +88,7 @@ public class BibDatabaseContext {
          * @param database the BibDatabase to use
          * @return this builder
          */
-        public Builder database(BibDatabase database) {
+        public Builder database(@NonNull BibDatabase database) {
             this.database = database;
             return this;
         }
@@ -99,7 +99,7 @@ public class BibDatabaseContext {
          * @param metaData the metadata to use
          * @return this builder
          */
-        public Builder metaData(MetaData metaData) {
+        public Builder metaData(@NonNull MetaData metaData) {
             this.metaData = metaData;
             return this;
         }
@@ -110,7 +110,7 @@ public class BibDatabaseContext {
          * @param path the file path
          * @return this builder
          */
-        public Builder path(Path path) {
+        public Builder path(@NonNull Path path) {
             this.path = path;
             return this;
         }
@@ -121,7 +121,7 @@ public class BibDatabaseContext {
          * @param location the database location (LOCAL or SHARED)
          * @return this builder
          */
-        public Builder location(DatabaseLocation location) {
+        public Builder location(@NonNull DatabaseLocation location) {
             this.location = location;
             return this;
         }
