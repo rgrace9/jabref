@@ -69,7 +69,7 @@ public class BibDatabaseContext {
     private DatabaseLocation location;
 
     /**
-     * Builder for creating BibDatabaseContext instances with optional configuration.
+     * Builder for creating {@link BibDatabaseContext} instances with optional configuration.
      * Default values:
      * database: empty BibDatabase
      * metaData: empty MetaData
@@ -127,7 +127,7 @@ public class BibDatabaseContext {
         }
 
         /**
-         * Builds and returns a new BibDatabaseContext with the configured values.
+         * Builds and returns a new {@link BibDatabaseContext} with the configured values.
          *
          * @return a new BibDatabaseContext instance
          */
